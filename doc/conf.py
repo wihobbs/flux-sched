@@ -45,7 +45,7 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 master_doc = "index"
 source_suffix = ".rst"
 
-extensions = ["sphinx.ext.intersphinx", "sphinx.ext.napoleon", "domainrefs"]
+extensions = ["sphinx.ext.intersphinx", "sphinx.ext.napoleon", "domainrefs", "breathe", "exhale"]
 
 domainrefs = {
     "linux:man1": {
@@ -159,3 +159,26 @@ intersphinx_mapping = {
         None,
     ),
 }
+
+# -- Options for Breathe Extension ------------------------------------------
+
+# This section specifies the Breathe extension for compatibility with RTD.
+#
+breathe_projects = {
+    "Fluxion Graph-Based Scheduler": "../resource/doxygen/xml"
+}
+breathe_default_project = "Fluxion Graph-Based Scheduler"
+
+exhale_args = {
+    "containmentFolder": 	"./api",
+    "rootFileName":		"library_root.rst",
+    "doxygenStripFromPath":	"..",
+    "rootFileTitle": 		"Library API",
+    "createTreeView":		True,
+    "exhaleExecutesDoxygen":	True,
+    "exhaleDoxygenStdin":	"INPUT = ../resource/doxygen"
+}
+
+primary_domain = 'hpp'
+
+highlight_language = 'hpp'
