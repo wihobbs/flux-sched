@@ -222,7 +222,7 @@ static void update_resource (flux_future_t *f, void *arg)
                                   &down,
                                   "expiration",
                                   &expiration)
-            < 0) {
+             < 0) {
         flux_log_error (ctx->h,
                         ctx->m_acquire_resources_from_core ? "%s: exiting due to resource.acquire "
                                                              "failure"
@@ -292,15 +292,13 @@ static int populate_resource_db_acquire (std::shared_ptr<resource_ctx_t> &ctx)
     // If this module is not getting resources from core, use
     //  sched-fluxion-resource.notify instead of resource.acquire to avoid
     //  using more than one resource.acquire RPC, which is not allowed
-    if (!(ctx->update_f =
-        flux_rpc (ctx->h,
-                  ctx->m_acquire_resources_from_core ? "resource.acquire"
-                                                     : "sched-fluxion-resource."
-                                                       "notify",
-                  NULL,
-                  FLUX_NODEID_ANY,
-                  FLUX_RPC_STREAMING)))
-    {
+    if (!(ctx->update_f = flux_rpc (ctx->h,
+                                    ctx->m_acquire_resources_from_core ? "resource.acquire"
+                                                                       : "sched-fluxion-resource."
+                                                                         "notify",
+                                    NULL,
+                                    FLUX_NODEID_ANY,
+                                    FLUX_RPC_STREAMING))) {
         flux_log_error (ctx->h, "%s: flux_rpc", __FUNCTION__);
         goto done;
     }
@@ -315,7 +313,7 @@ static int populate_resource_db_acquire (std::shared_ptr<resource_ctx_t> &ctx)
     // Otherwise, add update_resource_no_up_down callback to get error updates
     if (ctx->m_get_up_down_updates) {
         if (rc = flux_future_then (ctx->update_f, -1.0, update_resource, static_cast<void *> (&ctx))
-            < 0) {
+                 < 0) {
             flux_log_error (ctx->h, "%s: flux_future_then", __FUNCTION__);
             goto done;
         }
@@ -324,11 +322,10 @@ static int populate_resource_db_acquire (std::shared_ptr<resource_ctx_t> &ctx)
                                    -1.0,
                                    update_resource_no_up_down,
                                    static_cast<void *> (&ctx))
-                < 0) {
+                 < 0) {
             flux_log_error (ctx->h, "%s: flux_future_then", __FUNCTION__);
             goto done;
         }
-
     }
 
 done:
