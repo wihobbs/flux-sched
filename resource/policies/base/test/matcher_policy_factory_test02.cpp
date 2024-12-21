@@ -31,15 +31,20 @@ using namespace Flux::resource_model;
 int test_parsers ()
 {
     std::map<std::string, bool> container;
-    bool first = Flux::resource_model::parse_custom_match_policy("high=true node_centric=true node_exclusive=true stop_on_1_matches=false blah=4", container);
+    bool first = Flux::resource_model::parse_custom_match_policy (
+        "high=true node_centric=true node_exclusive=true stop_on_1_matches=false blah=4",
+        container);
     ok (first == false, "blah is an unrecognized policy option");
 
     std::map<std::string, bool> container2;
-    bool second = Flux::resource_model::parse_custom_match_policy("high=1 node_centric=true node_exclusive=true stop_on_1_matches=false", container2);
+    bool second = Flux::resource_model::parse_custom_match_policy (
+        "high=1 node_centric=true node_exclusive=true stop_on_1_matches=false", container2);
     ok (second == false, "1 is an invalid option, must be true or false");
 
     std::map<std::string, bool> container3;
-    bool third = Flux::resource_model::parse_custom_match_policy("high=true node_centric=true stop_on_1_matches=true", container3);
+    bool third = Flux::resource_model::
+        parse_custom_match_policy ("high=true node_centric=true stop_on_1_matches=true",
+                                   container3);
     ok (third == true, "first is a valid policy");
 
     // little debugging helper for printing the container
@@ -52,13 +57,13 @@ int test_parsers ()
 
     bool fifth = Flux::resource_model::parse_bool_match_options ("node_centric", container3);
     ok (fifth == true, "policy first uses option node_centric");
-    
+
     bool sixth = Flux::resource_model::parse_bool_match_options ("stop_on_1_matches", container3);
     ok (sixth == true, "policy first uses option stop_on_1_matches");
 
     bool seventh = Flux::resource_model::parse_bool_match_options ("low", container3);
     ok (seventh == false, "policy first does not use option low");
-    
+
     return 0;
 }
 
