@@ -126,10 +126,12 @@ int queue_policy_fcfs_t<reapi_type>::handle_match_failure (flux_jobid_t jobid, i
     if (errcode != EBUSY && errcode != ENODATA) {
         m_iter = to_rejected (m_iter, (errcode == ENODEV) ? "unsatisfiable" : "match error");
     }
-    if (errcode == ENODATA && m_queue_depth_limit) {
-        // Because the scheduling loop is being terminated
-        // per queue_depth_limit, the queue should still be
-        // schedulable.
+    if (errcode == ENODEV || (errcode == ENODATA && m_queue_depth_limit)) {
+        // Either:
+        // ENODEV: the job is unsatisfiable, or
+        // ENODATA && m_queue_depth_limit: the scheduling loop is being
+        //     terminated per queue_depth_limit
+        // We need to stop the sched loop, but the remainder is still schedulable.
         set_schedulability (true);
         m_queue_depth_limit = false;
     }
